@@ -1,48 +1,46 @@
 import java.io.*;
 import java.util.*;
-import java.util.stream.Collectors;
 import java.math.*;
 
-public class Main{
-	public static void main(String[] args) throws IOException{
+public class Main {
+	
+	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		int T = Integer.parseInt(br.readLine());
-		while(T-->0) {
+		int testcnt = Integer.parseInt(br.readLine());
+		while(testcnt-->0) {
 			StringTokenizer st = new StringTokenizer(br.readLine(), " ");
-			int N = Integer.parseInt(st.nextToken());
-			int M = Integer.parseInt(st.nextToken());
-			StringTokenizer sr = new StringTokenizer(br.readLine(), " ");
-		
-			Queue<Integer> pq1 = new LinkedList<>();
-			Queue<Integer> pq2 = new LinkedList<>();
-			int max = 0;
-			int cnt = 0;
-			for(int i =0; i<N; i++) {
-				pq1.offer(i);
-				int n = Integer.parseInt(sr.nextToken());
-				pq2.offer(n);
+			int n = Integer.parseInt(st.nextToken()); //문서의 개수 
+			int m = Integer.parseInt(st.nextToken()); //궁금한 문서가 몇번째 놓이는지 
+			LinkedList<int[]> q = new LinkedList<>();
+			st = new StringTokenizer(br.readLine(), " ");
+			for(int i=0; i<n; i++) {
+				q.offer(new int[] {i, Integer.parseInt(st.nextToken())});
 			}
-			
-			while(!pq1.isEmpty()) {
-				max = Collections.max(pq2);
-				if(max != pq2.peek()) {
-					pq1.add(pq1.poll());
-					pq2.add(pq2.poll());
-				} else {
-					if(pq1.poll() == M) {
-						pq2.poll();
-						cnt++;
-						break;
-					} else {
-						pq2.poll();
-						cnt++;
+			int cnt = 0;
+			while(true) {
+				int max = 0;
+				int maxidx = 0;
+				for(int i=0; i<q.size(); i++) {
+					if(max < q.get(i)[1]) {
+						max = q.get(i)[1];
 						
 					}
+					
+				}
+				while(q.peek()[1] != max) {
+					q.offer(q.poll());
+				}
+				//진짜 우선순위 맥스 값을 찾았으므로 빼야함 
+				int index = q.poll()[0];
+				cnt++;
+				if(index == m) {
+					System.out.println(cnt);
+					break;
 				}
 			}
-			System.out.println(cnt);
+			
 		}
 		
-		
-	}
+	}	
+
 }
